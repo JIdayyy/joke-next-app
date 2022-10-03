@@ -30,7 +30,7 @@ const Home: React.FC = () => {
             minH="100vh"
             minW="full"
         >
-            <Text fontSize={30} fontWeight="bold">
+            <Text fontSize={[20, 25, 30]} fontWeight="bold">
                 Wanna have fun for a minute ? 😁
             </Text>
 

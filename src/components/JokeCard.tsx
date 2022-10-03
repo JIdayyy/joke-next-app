@@ -47,6 +47,7 @@ export default function JokeCard({
             w={["95%", "80%", "50%"]}
             p={10}
             rounded="md"
+            fontSize={[20, 25, 35]}
             height="300px"
             flexDirection="column"
         >
@@ -60,7 +61,7 @@ export default function JokeCard({
 
             {showAnswer && (
                 <Text
-                    fontSize={30}
+                    fontSize={[15, 20, 30]}
                     fontWeight="bold"
                     textAlign="center"
                     color={colorMode === "light" ? "white" : "black"}
