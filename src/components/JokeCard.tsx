@@ -61,7 +61,7 @@ export default function JokeCard({
 
             {showAnswer && (
                 <Text
-                    fontSize={[15, 20, 30]}
+                    fontSize={[12, 17, 25]}
                     fontWeight="bold"
                     textAlign="center"
                     color={colorMode === "light" ? "white" : "black"}
