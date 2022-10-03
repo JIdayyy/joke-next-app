@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import { AppProps } from "next/app";
 import { ChakraProvider } from "@chakra-ui/react";
@@ -8,8 +9,9 @@ import { Hydrate } from "react-query/hydration";
 import { Provider } from "react-redux";
 import store from "@redux/store";
 
-function MyApp({ Component, pageProps }: AppProps): JSX.Element {
+function MyApp({ Component, pageProps }: AppProps<any>): JSX.Element {
     const queryClient = new QueryClient();
+
     return (
         <ChakraProvider theme={theme}>
             <QueryClientProvider client={queryClient}>
