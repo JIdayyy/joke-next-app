@@ -1,16 +1,11 @@
 import { Center, Spinner, Text, useColorMode } from "@chakra-ui/react";
-import axios from "axios";
+import { Joke } from "@prisma/client";
 import React, { Dispatch, SetStateAction } from "react";
-import { useQuery } from "react-query";
+import axiosInstance from "src/utils/axiosInstance";
 
-interface IJoke {
-    punchline: string;
-    question: string;
-}
-
-const getJoke = async () => {
-    const res = await axios.get<IJoke[]>(
-        "https://backend-omega-seven.vercel.app/api/getjoke",
+export const getJoke = async (): Promise<Joke[]> => {
+    const res = await axiosInstance.get<Joke[]>(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/joke/random`,
     );
     return res.data;
 };
@@ -18,22 +13,23 @@ const getJoke = async () => {
 interface IProps {
     showAnswer: boolean;
     setShowAnswer: Dispatch<SetStateAction<boolean>>;
+    data: Joke[];
+    isLoading: boolean;
 }
 
 export default function JokeCard({
     showAnswer,
-    setShowAnswer,
+    data,
+    isLoading,
 }: IProps): JSX.Element {
-    const { data, isLoading } = useQuery(["joke"], getJoke, {
-        onSuccess: () => {
-            setShowAnswer(false);
-        },
-    });
-
     const { colorMode } = useColorMode();
 
     if (!data) {
         return <Center>Error ...</Center>;
+    }
+
+    if (data.length === 0) {
+        return <Center>No jokes found</Center>;
     }
 
     if (isLoading) {
@@ -44,11 +40,11 @@ export default function JokeCard({
         <Center
             justifyContent="space-between"
             bg={colorMode === "light" ? "#1A202C" : "white"}
-            w={["95%", "80%", "50%"]}
+            minW={["95%", "85%", "70%", "50%"]}
             p={10}
             rounded="md"
             fontSize={[20, 25, 35]}
-            height="300px"
+            minH="300px"
             flexDirection="column"
         >
             <Text
@@ -56,7 +52,7 @@ export default function JokeCard({
                 textAlign="center"
                 color={colorMode === "light" ? "white" : "black"}
             >
-                {data[0].question}
+                {data[0].content}
             </Text>
 
             {showAnswer && (
@@ -66,7 +62,7 @@ export default function JokeCard({
                     textAlign="center"
                     color={colorMode === "light" ? "white" : "black"}
                 >
-                    {data[0].punchline} 😂🤣
+                    {data[0].answer} 😂🤣
                 </Text>
             )}
         </Center>

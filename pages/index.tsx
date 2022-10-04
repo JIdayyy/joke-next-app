@@ -1,12 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { Button, Center, Flex, Text, useColorMode } from "@chakra-ui/react";
-import JokeCard from "@components/JokeCard";
-import { useQueryClient } from "react-query";
+import JokeCard, { getJoke } from "@components/JokeCard";
+import { useQuery } from "react-query";
 import { NextSeo } from "next-seo";
+import MainLayout from "@components/Layouts/MainLayout";
+import CreateJokeModal from "@components/Modal/CreateJokeModal";
 
-const Home: React.FC = () => {
+function Home(): JSX.Element {
     const [showAnswer, setShowAnswer] = useState(false);
-    const client = useQueryClient();
+    const { data, isLoading, refetch, isRefetching } = useQuery(
+        ["joke"],
+        getJoke,
+        {
+            onSuccess: () => {
+                setShowAnswer(false);
+            },
+        },
+    );
 
     const { setColorMode, colorMode } = useColorMode();
 
@@ -21,7 +31,7 @@ const Home: React.FC = () => {
     };
 
     const handleNextJoke = () => {
-        client.invalidateQueries("joke");
+        refetch();
     };
 
     return (
@@ -69,17 +79,30 @@ const Home: React.FC = () => {
                 Wanna have fun for a minute ? 😁
             </Text>
 
-            <JokeCard showAnswer={showAnswer} setShowAnswer={setShowAnswer} />
+            <JokeCard
+                isLoading={isLoading}
+                data={data || []}
+                showAnswer={showAnswer}
+                setShowAnswer={setShowAnswer}
+            />
             <Flex justifyContent="space-between" w={["90%", "70%", "50%"]}>
-                <Button onClick={handleNextJoke} colorScheme="blue" my={2}>
+                <Button
+                    isLoading={isLoading || isRefetching}
+                    onClick={handleNextJoke}
+                    colorScheme="blue"
+                    my={2}
+                >
                     Get a new joke 😂
                 </Button>
                 <Button onClick={handleShowAnswer} colorScheme="green" my={2}>
                     Show Answer 😁
                 </Button>
             </Flex>
+            <CreateJokeModal />
         </Center>
     );
-};
+}
+
+Home.Layout = MainLayout;
 
 export default Home;
