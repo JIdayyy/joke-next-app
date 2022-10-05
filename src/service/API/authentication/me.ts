@@ -1,5 +1,5 @@
 import { NextApiHandler } from "next";
-import { sign, verify } from "src/service/security/jwt";
+import { JWTUserPayload, sign, verify } from "src/service/security/jwt";
 
 const checkMeHandler: NextApiHandler = async (req, res) => {
     const token = req.headers["authorization"]?.split(" ")[1];
