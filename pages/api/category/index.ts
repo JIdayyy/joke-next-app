@@ -1,16 +1,10 @@
 import { NextApiHandler } from "next";
-import prisma from "../../../prisma/client";
+import controller from "../../../src/service/API/category/controller";
 
 const categoryHandler: NextApiHandler = async (req, res) => {
-    if (req.method === "GET") {
-        try {
-            const categories = await prisma.category.findMany();
+    if (req.method === "GET") return controller.getALl(req, res);
 
-            res.status(200).json(categories);
-        } catch (error) {
-            res.status(500).json({ message: "Something wrong happened" });
-        }
-    }
+    return res.status(405).json("Method not allowed");
 };
 
 export default categoryHandler;

@@ -2,10 +2,7 @@ import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../../../prisma/client";
 import { Joke } from "@prisma/client";
 
-const getAllJokes: NextApiHandler<Joke[]> = async (
-    req: NextApiRequest,
-    res: NextApiResponse,
-) => {
+const getAllJokes: NextApiHandler<Joke[]> = async (req, res) => {
     try {
         const jokes = await prisma.joke.findMany();
 

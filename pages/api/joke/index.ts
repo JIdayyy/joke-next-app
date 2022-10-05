@@ -6,7 +6,7 @@ const jokeHandler: NextApiHandler = (req, res) => {
 
     if (req.method === "POST") return jokeController.create(req, res);
 
-    return res.status(405).json("Method not alloed");
+    return res.status(405).json("Method not allowed");
 };
 
 export default jokeHandler;
