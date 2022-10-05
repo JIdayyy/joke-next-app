@@ -1,15 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { Button, Center, Flex, Text, useColorMode } from "@chakra-ui/react";
+import {
+    Button,
+    Center,
+    Flex,
+    Select,
+    Text,
+    useColorMode,
+} from "@chakra-ui/react";
 import JokeCard, { getJoke } from "@components/JokeCard";
 import { useQuery } from "react-query";
 import MainLayout from "@components/Layouts/MainLayout";
-import CreateJokeModal from "@components/Modal/CreateJokeModal";
+import CreateJokeModal, {
+    getCategories,
+} from "@components/Modal/CreateJokeModal";
 
 function Home(): JSX.Element {
     const [showAnswer, setShowAnswer] = useState(false);
+    const [category, setCategory] = useState("all");
+    const { data: categories } = useQuery(["categories"], getCategories);
     const { data, isLoading, refetch, isRefetching } = useQuery(
         ["joke"],
-        getJoke,
+        () => getJoke(category),
         {
             onSuccess: () => {
                 setShowAnswer(false);
@@ -43,6 +54,16 @@ function Home(): JSX.Element {
             <Text fontSize={[20, 25, 30]} fontWeight="bold">
                 Wanna have fun for a minute ? 😁
             </Text>
+
+            <Select
+                onChange={(e) => setCategory(e.target.value)}
+                w={["95%", "85%", "70%", "50%"]}
+            >
+                <option value="All">All</option>
+                {categories?.map((category) => (
+                    <option value={category.id}>{category.name}</option>
+                ))}
+            </Select>
 
             <JokeCard
                 isLoading={isLoading}

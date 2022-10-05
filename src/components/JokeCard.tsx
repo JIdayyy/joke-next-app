@@ -3,9 +3,11 @@ import React, { Dispatch, SetStateAction } from "react";
 import { JokeWithUserRawSQL } from "src/service/API/joke/random";
 import axiosInstance from "src/utils/axiosInstance";
 
-export const getJoke = async (): Promise<JokeWithUserRawSQL> => {
+export const getJoke = async (
+    category: string,
+): Promise<JokeWithUserRawSQL> => {
     const res = await axiosInstance.get<JokeWithUserRawSQL>(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/joke/random`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/joke/random?user=true&category=${category}`,
     );
     return res.data;
 };

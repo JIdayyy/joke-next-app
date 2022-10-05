@@ -10,31 +10,41 @@ export type JokeWithUserRawSQL = {
 };
 
 const getRandomJoke: NextApiHandler = async (req, res) => {
-    const { user } = req.query;
-
+    const { user, category } = req.query;
     try {
-        const randomJoke: JokeWithUserRawSQL =
-            await prisma.$queryRaw`SELECT *  FROM "public"."Joke"  ORDER BY RANDOM() LIMIT 1`;
+        const getRandomJokeFromDB = async (): Promise<JokeWithUserRawSQL> => {
+            if (category === "All") {
+                return await prisma.$queryRaw`SELECT * FROM "public"."Joke" ORDER BY RANDOM() LIMIT 1`;
+            }
 
-        const jokeUser = await prisma.user.findUnique({
-            where: {
-                id: randomJoke[0].userId,
-            },
-            select: {
-                id: true,
-                email: true,
-                createdAt: true,
-                updatedAt: true,
-                password: false,
-                userName: true,
-            },
-        });
-
-        const jokeWithUser = {
-            0: { ...randomJoke[0], user: jokeUser },
+            return await prisma.$queryRaw`SELECT * FROM "public"."Joke" WHERE "categoryId" = ${category}  ORDER BY RANDOM() LIMIT 1`;
         };
-        console.log(jokeWithUser);
-        return res.status(200).json(jokeWithUser);
+
+        const randomJoke = await getRandomJokeFromDB();
+
+        if (user) {
+            const jokeUser = await prisma.user.findUnique({
+                where: {
+                    id: randomJoke[0].userId,
+                },
+                select: {
+                    id: true,
+                    email: true,
+                    createdAt: true,
+                    updatedAt: true,
+                    password: false,
+                    userName: true,
+                },
+            });
+
+            const jokeWithUser = {
+                0: { ...randomJoke[0], user: jokeUser },
+            };
+
+            return res.status(200).json(jokeWithUser);
+        }
+
+        return res.status(200).json(randomJoke);
     } catch (error) {
         console.log(error);
         res.status(500).json(error);

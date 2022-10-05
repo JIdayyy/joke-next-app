@@ -30,7 +30,7 @@ export const getCategories = async (): Promise<Category[]> => {
 
 export default function CreateJokeModal(): JSX.Element {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const { register, handleSubmit } = useForm();
+    const { register, handleSubmit, setValue } = useForm();
     const toast = useToast();
     const { data, isLoading } = useQuery(["categories"], getCategories);
     const { mutate, isLoading: createLoading } = useMutation(
@@ -41,6 +41,8 @@ export default function CreateJokeModal(): JSX.Element {
                     title: "Joke created",
                     description: "Thank you for your contribution 😍",
                 });
+                setValue("content", "");
+                setValue("answer", "");
                 onClose();
             },
         },

@@ -1,4 +1,4 @@
-import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
+import { NextApiHandler } from "next";
 import prisma from "../../../../prisma/client";
 import { Joke } from "@prisma/client";
 
