@@ -59,7 +59,7 @@ function Home(): JSX.Element {
                 onChange={(e) => setCategory(e.target.value)}
                 w={["95%", "85%", "70%", "50%"]}
             >
-                <option value="All">All</option>
+                <option value="all">All</option>
                 {categories?.map((category) => (
                     <option value={category.id}>{category.name}</option>
                 ))}
