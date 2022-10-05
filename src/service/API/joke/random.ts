@@ -13,7 +13,7 @@ const getRandomJoke: NextApiHandler = async (req, res) => {
     const { user, category } = req.query;
     try {
         const getRandomJokeFromDB = async (): Promise<JokeWithUserRawSQL> => {
-            if (category === "All") {
+            if (category === "all") {
                 return await prisma.$queryRaw`SELECT * FROM "public"."Joke" ORDER BY RANDOM() LIMIT 1`;
             }
 
@@ -21,7 +21,7 @@ const getRandomJoke: NextApiHandler = async (req, res) => {
         };
 
         const randomJoke = await getRandomJokeFromDB();
-
+        console.log(randomJoke);
         if (user) {
             const jokeUser = await prisma.user.findUnique({
                 where: {
