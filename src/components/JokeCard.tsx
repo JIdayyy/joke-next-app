@@ -1,10 +1,10 @@
 import { Center, Spinner, Text, useColorMode } from "@chakra-ui/react";
-import { Joke } from "@prisma/client";
 import React, { Dispatch, SetStateAction } from "react";
+import { JokeWithUserRawSQL } from "src/service/API/joke/random";
 import axiosInstance from "src/utils/axiosInstance";
 
-export const getJoke = async (): Promise<Joke[]> => {
-    const res = await axiosInstance.get<Joke[]>(
+export const getJoke = async (): Promise<JokeWithUserRawSQL> => {
+    const res = await axiosInstance.get<JokeWithUserRawSQL>(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/joke/random`,
     );
     return res.data;
@@ -13,7 +13,7 @@ export const getJoke = async (): Promise<Joke[]> => {
 interface IProps {
     showAnswer: boolean;
     setShowAnswer: Dispatch<SetStateAction<boolean>>;
-    data: Joke[];
+    data?: JokeWithUserRawSQL;
     isLoading: boolean;
 }
 
@@ -25,11 +25,7 @@ export default function JokeCard({
     const { colorMode } = useColorMode();
 
     if (!data) {
-        return <Center>Error ...</Center>;
-    }
-
-    if (data.length === 0) {
-        return <Center>No jokes found</Center>;
+        return <Spinner />;
     }
 
     if (isLoading) {
@@ -49,21 +45,30 @@ export default function JokeCard({
         >
             <Text
                 fontWeight="bold"
-                textAlign="center"
                 color={colorMode === "light" ? "white" : "black"}
+                textAlign="center"
             >
                 {data[0].content}
             </Text>
 
             {showAnswer && (
-                <Text
-                    fontSize={[12, 17, 25]}
-                    fontWeight="bold"
-                    textAlign="center"
-                    color={colorMode === "light" ? "white" : "black"}
-                >
-                    {data[0].answer} 😂🤣
-                </Text>
+                <>
+                    <Text
+                        fontSize={[12, 17, 25]}
+                        fontWeight="bold"
+                        textAlign="center"
+                        color={colorMode === "light" ? "white" : "black"}
+                    >
+                        {data[0].answer} 😂🤣
+                    </Text>
+                    <Text
+                        fontWeight="medium"
+                        color={colorMode === "light" ? "white" : "black"}
+                        fontSize={[12, 12, 12]}
+                    >
+                        ( merci à {data[0].user.userName} )
+                    </Text>
+                </>
             )}
         </Center>
     );

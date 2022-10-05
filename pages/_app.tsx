@@ -11,7 +11,13 @@ import { UserContextProvider } from "src/context/UserContext";
 const Noop = ({ children }: { children: ReactNode }) => <>{children}</>;
 
 function MyApp({ Component, pageProps }: AppProps<any>): JSX.Element {
-    const queryClient = new QueryClient();
+    const queryClient = new QueryClient({
+        defaultOptions: {
+            queries: {
+                refetchOnWindowFocus: false,
+            },
+        },
+    });
 
     const Layout = (Component as any).Layout || Noop;
 

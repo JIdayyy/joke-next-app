@@ -46,7 +46,7 @@ function Home(): JSX.Element {
 
             <JokeCard
                 isLoading={isLoading}
-                data={data || []}
+                data={data}
                 showAnswer={showAnswer}
                 setShowAnswer={setShowAnswer}
             />
