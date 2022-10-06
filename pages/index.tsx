@@ -46,12 +46,13 @@ function Home(): JSX.Element {
 
     return (
         <Center
+            as="main"
             justifyContent="space-around"
             flexDirection="column"
             minH="100vh"
             minW="full"
         >
-            <Text fontSize={[20, 25, 30]} fontWeight="bold">
+            <Text as="h1" fontSize={[20, 25, 30]} fontWeight="bold">
                 Wanna have fun for a minute ? 😁
             </Text>
 
@@ -85,6 +86,14 @@ function Home(): JSX.Element {
                 </Button>
             </Flex>
             <CreateJokeModal />
+            <Flex>
+                <Text>Made with ❤️ and ☕️ by</Text>
+                <a href="https://github.com/JIdayyy" target="_blank">
+                    <Text ml={1} cursor="pointer" color={"blue.400"}>
+                        Jidayyy
+                    </Text>
+                </a>
+            </Flex>
         </Center>
     );
 }
